@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="welcome-banner text-center">
+    <div class="container">
+        <h1 class="display-4 mb-3 animate-text">Welcome to NDUcart</h1>
+        <p class="lead animate-text-delay">Discover products tailored just for you</p>
+        <div class="mt-4">
+            <a href="/explore" class="btn btn-light btn-lg pulse-animation">
+                <i class="fas fa-compass me-2"></i>Explore Products
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0 section-title">Your Personalized Products</h2>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                        <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                        <li><a class="dropdown-item" href="#">Rating</a></li>
+                        <li><a class="dropdown-item" href="#">Newest</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if products %}
+        {% for product in products %}
+        <div class="col-md-4 mb-4 product-item" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+            <div class="card h-100 product-card">
+                <a href="/product/{{ product[0] }}" class="text-decoration-none text-dark">
+                    <div class="position-relative">
+                        <img src="{{ product[5] or 'https://via.placeholder.com/300x200' }}"
+                            class="card-img-top product-image" alt="{{ product[1] }}" loading="lazy" width="300"
+                            height="200">
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-primary">{{ "%.1f"|format(product[8] or 0) }} ★</span>
+                        </div>
+                        <div class="product-overlay">
+                            <div class="product-actions">
+                                <a href="/product/{{ product[0] }}" class="btn btn-light btn-sm"
+                                    onclick="event.stopPropagation()">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn btn-light btn-sm" onclick="event.stopPropagation()">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="btn btn-light btn-sm" onclick="event.stopPropagation()">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{ product[1] }}</h5>
+                            <span class="price-tag">₹{{ "%.2f"|format(product[3] or 0) }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="category-badge">{{ product[4] }}</span>
+                            <span class="category-badge">{{ product[6] }}</span>
+                        </div>
+                        <p class="card-text text-muted small mb-3">
+                            <i class="fas fa-tag me-1"></i>{{ product[7] or 'N/A' }}
+                        </p>
+                        <p class="card-text">{{ (product[2] or '')[:100] }}...</p>
+                    </div>
+                </a>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="/product/{{ product[0] }}" class="btn btn-primary w-100">
+                        <i class="fas fa-shopping-cart me-1"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="text-center py-5 empty-state">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h3>No products available</h3>
+                <p class="text-muted">Please check back later for new products.</p>
+                <a href="/explore" class="btn btn-primary mt-3">
+                    <i class="fas fa-compass me-1"></i>Explore All Products
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container text-center mt-5 mb-5">
+    <p>Contact: gandiujval | Mail ID: <a href="mailto:gandiujval100@gmail.com">gandiujval100@gmail.com</a></p>
+</div>
+
+<style>
+    /* Animation for welcome text - optimized */
+    .animate-text {
+        animation: fadeInUp 0.5s ease;
+    }
+
+    .animate-text-delay {
+        animation: fadeInUp 0.5s ease 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Pulse animation for CTA button - optimized */
+    .pulse-animation {
+        animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+    }
+
+    /* Section title styling */
+    .section-title {
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+        border-radius: 3px;
+    }
+
+    /* Product card enhancements - optimized */
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        will-change: opacity;
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .product-actions .btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        color: var(--primary-color);
+        transition: all 0.2s ease;
+        will-change: transform, background-color, color;
+    }
+
+    .product-actions .btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    /* Empty state styling */
+    .empty-state {
+        padding: 60px 0;
+        background: white;
+        border-radius: 15px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .empty-state i {
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Product card click handling
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            // Add hover effect
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+
+            // Handle click events
+            const cardLink = card.querySelector('a[href^="/product/"]');
+            if (cardLink) {
+                card.addEventListener('click', function (e) {
+                    // Only navigate if the click wasn't on an action button
+                    if (!e.target.closest('.product-actions')) {
+                        window.location.href = cardLink.href;
+                    }
+                });
+            }
+        });
+
+        // Optimized AOS (Animate On Scroll) effect
+        const productItems = document.querySelectorAll('.product-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '50px 0px'
+        });
+
+        productItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(10px)';
+            item.style.transition = 'all 0.3s ease';
+            observer.observe(item);
+        });
+    });
+</script>
+{% endblock %}

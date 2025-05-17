@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="welcome-banner text-center">
+    <div class="container">
+        <h1 class="display-4 mb-3">Explore All Products</h1>
+        <p class="lead">Discover our complete collection</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search and Filters Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form class="d-flex" action="{{ url_for('explore') }}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search products..."
+                        value="{{ search_query }}" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-end gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-filter me-1"></i>Category
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item {% if current_category == 'all' %}active{% endif %}"
+                                href="{{ url_for('explore', category='all', sort=current_sort, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                All Categories
+                            </a></li>
+                        {% for category in categories %}
+                        <li><a class="dropdown-item {% if current_category == category %}active{% endif %}"
+                                href="{{ url_for('explore', category=category, sort=current_sort, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                {{ category }}
+                            </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-sort me-1"></i>Sort
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item {% if current_sort == 'newest' %}active{% endif %}"
+                                href="{{ url_for('explore', sort='newest', category=current_category, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                Newest
+                            </a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'price_low' %}active{% endif %}"
+                                href="{{ url_for('explore', sort='price_low', category=current_category, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                Price: Low to High
+                            </a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'price_high' %}active{% endif %}"
+                                href="{{ url_for('explore', sort='price_high', category=current_category, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                Price: High to Low
+                            </a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'rating' %}active{% endif %}"
+                                href="{{ url_for('explore', sort='rating', category=current_category, search=search_query, min_price=min_price, max_price=max_price) }}">
+                                Rating
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-dollar-sign me-1"></i>Price Range
+                    </button>
+                    <div class="dropdown-menu p-3" style="min-width: 300px;">
+                        <div class="mb-3">
+                            <label for="min-price" class="form-label">Min Price</label>
+                            <input type="number" class="form-control" id="min-price" name="min_price"
+                                value="{{ min_price }}" min="0" step="0.01">
+                        </div>
+                        <div class="mb-3">
+                            <label for="max-price" class="form-label">Max Price</label>
+                            <input type="number" class="form-control" id="max-price" name="max_price"
+                                value="{{ max_price }}" min="0" step="0.01">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 product-card">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                    style="height: 200px;">
+                    <i class="fas fa-image fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description[:100] }}{% if product.description|length >
+                        100 %}...{% endif %}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="h5 mb-0">${{ "%.2f"|format(product.price) }}</span>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            <span>{{ "%.1f"|format(product.avg_rating or 0) }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary w-100">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h3>No products found</h3>
+            <p class="text-muted">Try adjusting your search or filters</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+{% endblock %}

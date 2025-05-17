@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDUcart - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/loginBackground/background.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid min-vh-100 d-flex flex-column align-items-center justify-content-center py-5">
+        <!-- Centered Branding -->
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold text-primary mb-3">
+                <span class="gradient-text">NDUcart</span>
+            </h1>
+            <p class="lead text-muted mb-0">
+                <span class="tagline">Redefining E-Commerce.</span>
+                <span class="subtagline">A Smarter Way to Shop, Just for You.</span>
+            </p>
+        </div>
+
+        <div class="row w-100 justify-content-center g-4 d-flex">
+            <!-- Login Form Section -->
+            <div class="col-md-5">
+                <div class="card shadow-lg h-100">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">{{ 'Register' if is_login else 'Login ' }}</h2>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" action="{{ url_for('login') }}">
+                            <div class="mb-4">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="username" name="username"
+                                    required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control form-control-lg" id="password"
+                                    name="password" required>
+                            </div>
+                            <div class="d-grid gap-2 mb-4">
+                                <button type="submit" class="btn btn-primary btn-lg">{{ 'Register' if is_login else
+                                    'Login' }}</button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="d-grid gap-3">
+                            <a href="{{ url_for('google_login') }}" class="btn btn-outline-danger btn-lg">
+                                <i class="fab fa-google me-2"></i> Continue with Google
+                            </a>
+                            <a href="{{ url_for('apple_login') }}" class="btn btn-outline-dark btn-lg">
+                                <i class="fab fa-apple me-2"></i> Continue with Apple
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p class="mb-0">Don't have an account? <a href="{{ url_for('register') }}"
+                                    class="text-primary">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="col-md-5">
+                <div class="dsmart-info h-100">
+                    <h2 class="text-center mb-4">About</h2>
+                    <div class="info-section">
+                        <h3><i class="fas fa-brain"></i> Intelligent Recommendations</h3>
+                        <p>Experience personalized shopping with our advanced AI that learns your preferences and
+                            suggests products you'll love.</p>
+                    </div>
+                    <div class="info-section">
+                        <h3><i class="fas fa-robot"></i> Multi-Agent System</h3>
+                        <p>Our sophisticated multi-agent system works together to provide you with the most relevant and
+                            personalized shopping experience.</p>
+                    </div>
+                    <div class="info-section">
+                        <h3><i class="fas fa-chart-line"></i> Continuous Learning</h3>
+                        <p>NDUcart evolves with you, constantly improving its recommendations based on your interactions
+                            and preferences.</p>
+                    </div>
+                    <div class="info-section">
+                        <h3><i class="fas fa-shield-alt"></i> Privacy Focused</h3>
+                        <p>Your data privacy is our priority. Enjoy secure and personalized shopping without
+                            compromising your information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
