@@ -1,4 +1,4 @@
-# DSmart - Multi-Agent E-commerce Recommendation System
+# NDUmart - Multi-Agent E-commerce Recommendation System
 
 DSmart is an intelligent e-commerce platform that uses a multi-agent system to provide personalized product recommendations to users. The system adapts to user preferences and behavior over time, offering increasingly relevant suggestions.
 
